@@ -1,0 +1,7 @@
+[package]
+name = "brick-break"
+version = "0.1.0"
+authors = []
+
+[dependencies]
+amethyst = "0.8.0"
