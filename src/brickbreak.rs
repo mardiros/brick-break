@@ -16,11 +16,14 @@ pub const PADDLE_HEIGHT: f32 = 4.0;
 pub const PADDLE_WIDTH: f32 = 16.0;
 const PADDLE_POS_Y: f32 = ARENA_HEIGHT * 0.05;
 
-
 const BRICK_HEIGHT: f32 = 4.0;
 const BRICK_WIDTH: f32 = 12.0;
 
 const SPRITESHEET_SIZE: (f32, f32) = (16.0, 12.0);
+
+const BALL_RADIUS: f32 = 2.0;
+const BALL_VELOCITY_X: f32 = 75.0;
+const BALL_VELOCITY_Y: f32 = 50.0;
 
 
 pub struct BrickBreak;
@@ -44,9 +47,11 @@ impl<'a, 'b> State<GameData<'a, 'b>> for BrickBreak {
         };
         world.register::<Paddle>();
         world.register::<Brick>();
+        world.register::<Ball>();
 
         initialise_paddle(world, &spritesheet);
         initialise_bricks(world, &spritesheet);
+        initialise_ball(world, &spritesheet);
         initialise_camera(world);
     }
 
@@ -171,4 +176,52 @@ fn initialise_bricks(world: &mut World, spritesheet: &TextureHandle) {
         .with(left_transform)
         .build();
 
+}
+
+
+pub struct Ball {
+    pub velocity: [f32; 2],
+    pub radius: f32,
+}
+
+impl Ball {
+    fn new() -> Ball {
+        Ball {
+            radius: BALL_RADIUS,
+            velocity: [BALL_VELOCITY_X, BALL_VELOCITY_Y],
+        }   
+    }
+}
+
+impl Component for Ball {
+    type Storage = DenseVecStorage<Self>;
+}
+
+
+/// Initialises one ball in the middle-ish of the arena.
+fn initialise_ball(world: &mut World, spritesheet: &TextureHandle) {
+
+    // Create the translation.
+    let mut local_transform = Transform::default();
+    let x = ARENA_WIDTH * 0.5;
+    let y = ARENA_HEIGHT * 0.05 + PADDLE_HEIGHT;
+
+    local_transform.translation = Vector3::new(x, y, 0.0);
+
+    // Create the sprite for the ball.
+    let sprite = Sprite {
+        left: 12.0,
+        right: 12.0 + BALL_RADIUS * 2.0,
+        top: 4.0,
+        bottom: 4.0 + BALL_RADIUS * 2.0,
+    };
+
+    world
+        .create_entity()
+        .with_sprite(&sprite, spritesheet.clone(), SPRITESHEET_SIZE)
+        .expect("Error creating SpriteRender for ball")
+        .with(Ball::new())
+        .with(local_transform)
+        .with(GlobalTransform::default())
+        .build();
 }
