@@ -188,7 +188,7 @@ impl Ball {
     fn new() -> Ball {
         Ball {
             radius: BALL_RADIUS,
-            velocity: [BALL_VELOCITY_X, BALL_VELOCITY_Y],
+            velocity: [0.0, 0.0],
         }   
     }
 }
