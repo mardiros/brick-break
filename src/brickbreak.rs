@@ -9,11 +9,11 @@ use amethyst::renderer::{
     VirtualKeyCode, WithSpriteRender,
 };
 
-const ARENA_HEIGHT: f32 = 400.0;
-const ARENA_WIDTH: f32 = 400.0;
+pub const ARENA_HEIGHT: f32 = 400.0;
+pub const ARENA_WIDTH: f32 = 400.0;
 
-const PADDLE_HEIGHT: f32 = 4.0;
-const PADDLE_WIDTH: f32 = 16.0;
+pub const PADDLE_HEIGHT: f32 = 4.0;
+pub const PADDLE_WIDTH: f32 = 16.0;
 const PADDLE_POS_Y: f32 = ARENA_HEIGHT * 0.05;
 
 
@@ -79,7 +79,7 @@ fn initialise_camera(world: &mut World) {
         .build();
 }
 
-struct Paddle {
+pub struct Paddle {
     pub width: f32,
     pub height: f32,
 }
