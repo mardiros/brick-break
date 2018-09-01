@@ -31,7 +31,9 @@ fn main() -> Result<(), amethyst::Error> {
         .with_basic_renderer(path, DrawFlat::<PosTex>::new(), false)?
         .with_bundle(input_bundle)?
         .with(systems::BallSystem, "ball_system", &["input_system"])
-        .with(systems::PaddleSystem, "paddle_system", &["input_system"]);
+        .with(systems::PaddleSystem, "paddle_system", &["input_system"])
+        .with(systems::StartSystem, "start_system", &["input_system"])
+        .with(systems::CollisionSystem, "collision_system", &["ball_system", "paddle_system"]);
 
     let mut game = Application::build(assets_dir, BrickBreak)?
         .build(game_data)?;

@@ -2,5 +2,7 @@
   axes: {
     "paddle": Emulated(pos: Key(Right), neg: Key(Left)),
   },
-  actions: {},
+  actions: {
+    "start": [Key(Space)],
+  },
 )
