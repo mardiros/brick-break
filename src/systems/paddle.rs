@@ -17,7 +17,7 @@ impl<'s> System<'s> for PaddleSystem {
             let movement = input.axis_value("paddle");
             if let Some(mv_amount) = movement {
                 if mv_amount != 0.0 {
-                    let scaled_amount = 1.5 * mv_amount as f32;
+                    let scaled_amount = 1.7 * mv_amount as f32;
                     let new_val = (transform.translation[0] + scaled_amount)
                         .min(ARENA_WIDTH - PADDLE_WIDTH * 0.5)
                         .max(PADDLE_WIDTH * 0.5);
