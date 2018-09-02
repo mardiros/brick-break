@@ -16,12 +16,12 @@ pub const PADDLE_HEIGHT: f32 = 4.0;
 pub const PADDLE_WIDTH: f32 = 16.0;
 pub const PADDLE_POS_Y: f32 = ARENA_HEIGHT * 0.05;
 
-const BRICK_HEIGHT: f32 = 4.0;
-const BRICK_WIDTH: f32 = 12.0;
+pub const BRICK_HEIGHT: f32 = 4.0;
+pub const BRICK_WIDTH: f32 = 12.0;
 
 const SPRITESHEET_SIZE: (f32, f32) = (16.0, 12.0);
 
-const BALL_RADIUS: f32 = 2.0;
+pub const BALL_RADIUS: f32 = 2.0;
 pub const BALL_VELOCITY_X: f32 = 100.0;
 pub const BALL_VELOCITY_Y: f32 = 100.0;
 
@@ -129,19 +129,12 @@ fn initialise_paddle(world: &mut World, spritesheet: &TextureHandle) {
         .build();
 }
 
-
-
-struct Brick {
-    pub width: f32,
-    pub height: f32,
+pub struct Brick {
 }
 
 impl Brick {
     fn new() -> Brick {
-        Brick {
-            width: 1.0,
-            height: 1.0,
-        }   
+        Brick {}
     }
 }
 
@@ -150,13 +143,11 @@ impl Component for Brick {
 }
 
 fn initialise_bricks(world: &mut World, spritesheet: &TextureHandle) {
-    let mut left_transform = Transform::default();
 
     // Correctly position the paddles.
-    let x = ARENA_WIDTH * 0.5;
+    let mut x = ARENA_WIDTH * 0.05;
     let y = ARENA_HEIGHT * 0.95;
 
-    left_transform.translation = Vector3::new(x, y, 0.0);
 
     // Build the sprite for the paddles.
     let sprite = Sprite {
@@ -166,15 +157,23 @@ fn initialise_bricks(world: &mut World, spritesheet: &TextureHandle) {
         bottom: 8.0 + BRICK_HEIGHT,
     };
 
-    // Create a left plank entity.
-    world
-        .create_entity()
-        .with_sprite(&sprite, spritesheet.clone(), SPRITESHEET_SIZE)
-        .expect("Failed to add sprite render on paddle")
-        .with(Brick::new())
-        .with(GlobalTransform::default())
-        .with(left_transform)
-        .build();
+    for _ in 0..30 {
+
+        let mut left_transform = Transform::default();
+        left_transform.translation = Vector3::new(x, y, 0.0);
+
+        // Create a left plank entity.
+        world
+            .create_entity()
+            .with_sprite(&sprite, spritesheet.clone(), SPRITESHEET_SIZE)
+            .expect("Failed to add sprite render on paddle")
+            .with(Brick::new())
+            .with(GlobalTransform::default())
+            .with(left_transform)
+            .build();
+
+        x += BRICK_WIDTH * 1.05;
+    }
 
 }
 
