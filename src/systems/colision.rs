@@ -4,8 +4,9 @@ use amethyst::ecs::prelude::{Join, Read, ReadStorage, System, WriteStorage, Enti
 use amethyst::core::transform::components::Transform;
 use amethyst::core::timing::Time;
 
-use super::super::brickbreak::{
-    Paddle, Ball, Brick,
+use super::super::brickbreak::{Paddle, Ball, Brick};
+
+use super::super::constants::{
     ARENA_WIDTH, ARENA_HEIGHT,
     PADDLE_POS_Y, PADDLE_WIDTH, PADDLE_HEIGHT,
     BALL_RADIUS, BRICK_WIDTH, BRICK_HEIGHT,

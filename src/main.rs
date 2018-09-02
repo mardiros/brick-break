@@ -5,6 +5,7 @@ use amethyst::core::transform::TransformBundle;
 use amethyst::input::InputBundle;
 use amethyst::renderer::{DrawFlat, PosTex};
 
+mod constants;
 mod brickbreak;
 mod systems;
 

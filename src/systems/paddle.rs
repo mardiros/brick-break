@@ -1,7 +1,8 @@
 use amethyst::core::transform::components::Transform;
 use amethyst::ecs::prelude::{Join, Read, ReadStorage, System, WriteStorage};
 use amethyst::input::InputHandler;
-use super::super::brickbreak::{Paddle, ARENA_WIDTH, PADDLE_WIDTH};
+use super::super::brickbreak::Paddle;
+use super::super::constants::{ARENA_WIDTH, PADDLE_WIDTH, PADDLE_MOVE_FACTOR};
 
 pub struct PaddleSystem;
 
@@ -17,7 +18,7 @@ impl<'s> System<'s> for PaddleSystem {
             let movement = input.axis_value("paddle");
             if let Some(mv_amount) = movement {
                 if mv_amount != 0.0 {
-                    let scaled_amount = 1.7 * mv_amount as f32;
+                    let scaled_amount = PADDLE_MOVE_FACTOR * mv_amount as f32;
                     let new_val = (transform.translation[0] + scaled_amount)
                         .min(ARENA_WIDTH - PADDLE_WIDTH * 0.5)
                         .max(PADDLE_WIDTH * 0.5);

@@ -1,6 +1,7 @@
 use amethyst::ecs::prelude::{Join, Read, System, WriteStorage};
 use amethyst::input::InputHandler;
-use super::super::brickbreak::{Ball, BALL_VELOCITY_X, BALL_VELOCITY_Y};
+use super::super::brickbreak::Ball;
+use super::super::constants::{BALL_VELOCITY_X, BALL_VELOCITY_Y};
 
 pub struct StartSystem;
 

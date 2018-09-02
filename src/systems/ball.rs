@@ -2,7 +2,8 @@ use amethyst::core::transform::components::Transform;
 use amethyst::ecs::prelude::{Join, Read, ReadStorage, System, WriteStorage};
 use amethyst::core::timing::Time;
 use amethyst::input::InputHandler;
-use super::super::brickbreak::{Ball, ARENA_WIDTH, PADDLE_WIDTH};
+use super::super::brickbreak::Ball;
+use super::super::constants::{PADDLE_MOVE_FACTOR, ARENA_WIDTH, PADDLE_WIDTH};
 
 pub struct BallSystem;
 
@@ -21,7 +22,7 @@ impl<'s> System<'s> for BallSystem {
                 if mv_amount != 0.0 {
                     if ball.velocity == [0.0, 0.0] {
                         // the game is not started, the ball is glued to the paddle
-                        let scaled_amount = 1.5 * mv_amount as f32;
+                        let scaled_amount = PADDLE_MOVE_FACTOR * mv_amount as f32;
                         let new_val = (transform.translation[0] + scaled_amount)
                             .min(ARENA_WIDTH - PADDLE_WIDTH * 0.5)
                             .max(PADDLE_WIDTH * 0.5);
