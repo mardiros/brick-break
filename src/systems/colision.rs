@@ -39,21 +39,21 @@ impl<'s> System<'s> for CollisionSystem {
 
                 // collission with the arena
                 let ball_x = transform.translation[0] + ball.velocity[0] * time.delta_seconds();
-                if (ball_x > ARENA_WIDTH) || (ball_x < 0.0){
+                if (ball_x + BALL_RADIUS > ARENA_WIDTH) || (ball_x - BALL_RADIUS < 0.0){
                     ball.velocity[0] *= -1.0;
                 }
                 let ball_y = transform.translation[1] + ball.velocity[1] * time.delta_seconds();
-                if ball_y > ARENA_HEIGHT {
+                if ball_y + BALL_RADIUS > ARENA_HEIGHT {
                     ball.velocity[1] *= -1.0;
                 }
 
                 // collision with the paddle
                 let half_pad = PADDLE_WIDTH * 0.5;
-                if (ball_y < PADDLE_POS_Y) && (ball_y > (PADDLE_POS_Y - PADDLE_HEIGHT)) {
+                if (ball_y - BALL_RADIUS < PADDLE_POS_Y) && (ball_y + BALL_RADIUS> (PADDLE_POS_Y - PADDLE_HEIGHT)) {
                     for (_, paddle_transform) in (&paddles, &transforms).join() {
                         let paddle_x = paddle_transform.translation[0];
-                        if (ball_x > paddle_x - half_pad) &&
-                           (ball_x < paddle_x + half_pad) {
+                        if (ball_x + BALL_RADIUS > paddle_x - half_pad) &&
+                           (ball_x - BALL_RADIUS < paddle_x + half_pad) {
                             ball.velocity[1] *= -1.0;
                             ball.velocity[0] = ((ball_x - paddle_x) / half_pad) * ball.velocity[1];
                         }
@@ -74,6 +74,7 @@ impl<'s> System<'s> for CollisionSystem {
                     ) {
                         ball.velocity[1] *= -1.0;
                         entities.delete(entity).unwrap();
+                        break;
                     }
                 }
            }
