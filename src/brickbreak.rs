@@ -146,7 +146,7 @@ fn initialise_bricks(world: &mut World, spritesheet: &TextureHandle) {
 
     // Correctly position the paddles.
     let mut x = ARENA_WIDTH * 0.05;
-    let y = ARENA_HEIGHT * 0.95;
+    let mut y = ARENA_HEIGHT * 0.95;
 
 
     // Build the sprite for the paddles.
@@ -157,22 +157,29 @@ fn initialise_bricks(world: &mut World, spritesheet: &TextureHandle) {
         bottom: 8.0 + BRICK_HEIGHT,
     };
 
-    for _ in 0..30 {
+    for _ in 0..8 {
 
-        let mut left_transform = Transform::default();
-        left_transform.translation = Vector3::new(x, y, 0.0);
+        for _ in 0..30 {
 
-        // Create a left plank entity.
-        world
-            .create_entity()
-            .with_sprite(&sprite, spritesheet.clone(), SPRITESHEET_SIZE)
-            .expect("Failed to add sprite render on paddle")
-            .with(Brick::new())
-            .with(GlobalTransform::default())
-            .with(left_transform)
-            .build();
+            let mut left_transform = Transform::default();
+            left_transform.translation = Vector3::new(x, y, 0.0);
 
-        x += BRICK_WIDTH * 1.05;
+            // Create a left plank entity.
+            world
+                .create_entity()
+                .with_sprite(&sprite, spritesheet.clone(), SPRITESHEET_SIZE)
+                .expect("Failed to add sprite render on paddle")
+                .with(Brick::new())
+                .with(GlobalTransform::default())
+                .with(left_transform)
+                .build();
+
+            x += BRICK_WIDTH * 1.05;
+        }
+
+        y -= BRICK_HEIGHT * 4.0;
+        x = ARENA_WIDTH * 0.05;
+
     }
 
 }
