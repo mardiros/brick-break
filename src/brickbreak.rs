@@ -10,6 +10,7 @@ use amethyst::renderer::{
 };
 
 use super::constants::*;
+use super::audio::initialise_audio;
 
 pub struct BrickBreak;
 
@@ -38,6 +39,7 @@ impl<'a, 'b> State<GameData<'a, 'b>> for BrickBreak {
         initialise_bricks(world, &spritesheet);
         initialise_ball(world, &spritesheet);
         initialise_camera(world);
+        initialise_audio(world);
     }
 
     fn handle_event(&mut self, _: StateData<GameData>, event: Event) -> Trans<GameData<'a, 'b>> {

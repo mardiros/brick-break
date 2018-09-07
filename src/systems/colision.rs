@@ -1,10 +1,14 @@
+use std::ops::Deref;
 
-
-use amethyst::ecs::prelude::{Join, Read, ReadStorage, System, WriteStorage, Entities};
+use amethyst::ecs::prelude::{Join, Read, ReadStorage, ReadExpect, System, WriteStorage, Entities};
+use amethyst::assets::AssetStorage;
+use amethyst::audio::output::Output;
+use amethyst::audio::Source;
 use amethyst::core::transform::components::Transform;
 use amethyst::core::timing::Time;
 
 use super::super::brickbreak::{Paddle, Ball, Brick};
+use super::super::audio::{play_brick_broken, Sounds};
 
 use super::super::constants::{
     ARENA_WIDTH, ARENA_HEIGHT,
@@ -31,9 +35,12 @@ impl<'s> System<'s> for CollisionSystem {
         ReadStorage<'s, Brick>,
         ReadStorage<'s, Transform>,
         Read<'s, Time>,
+        Read<'s, AssetStorage<Source>>,
+        ReadExpect<'s, Sounds>,
+        Option<Read<'s, Output>>,
     );
 
-    fn run(&mut self, (entities, mut balls, paddles, bricks, transforms, time): Self::SystemData) {
+    fn run(&mut self, (entities, mut balls, paddles, bricks, transforms, time, storage, sounds, audio_output): Self::SystemData) {
         for (ball, transform) in (&mut balls, &transforms).join() {
             // game is started
             if ball.velocity != [0.0, 0.0] {
@@ -48,9 +55,13 @@ impl<'s> System<'s> for CollisionSystem {
                     ball.velocity[1] *= -1.0;
                 }
 
+                if ball_y < 0.0 {
+                    ball.velocity = [0.0, 0.0];
+                }
+
                 // collision with the paddle
                 let half_pad = PADDLE_WIDTH * 0.5;
-                if (ball_y - BALL_RADIUS < PADDLE_POS_Y) && (ball_y + BALL_RADIUS> (PADDLE_POS_Y - PADDLE_HEIGHT)) {
+                if (ball_y - BALL_RADIUS < PADDLE_POS_Y) && (ball_y + BALL_RADIUS > (PADDLE_POS_Y - PADDLE_HEIGHT)) {
                     for (_, paddle_transform) in (&paddles, &transforms).join() {
                         let paddle_x = paddle_transform.translation[0];
                         if (ball_x + BALL_RADIUS > paddle_x - half_pad) &&
@@ -75,6 +86,7 @@ impl<'s> System<'s> for CollisionSystem {
                     ) {
                         ball.velocity[1] *= -1.0;
                         entities.delete(entity).unwrap();
+                        play_brick_broken(&*sounds, &storage, audio_output.as_ref().map(|o| o.deref()));
                         break;
                     }
                 }
@@ -82,27 +94,3 @@ impl<'s> System<'s> for CollisionSystem {
         }
     }
 }
-
-
-/*
-                // collision with bricks
-                let direction = (ball.velocity[0] > 0.0, ball.velocity[1] > 0.0);
-                for (brick, brick_transform) in (&mut bricks, &transforms).join() {
-                    let brick_x = brick_transform.translation[0] - BRICK_WIDTH * 0.5;
-                    match direction {
-                        (false, false) => {
-                            //println!("down left");
-                        },
-                        (false, true) => {
-                            //println!("up left");
-                        },
-                        (true, false) => {
-                            //println!("down right");
-                        },
-                        (true, true) => {
-                            //println!("up right");
-                        }
-                    } 
-                }
-
-*/

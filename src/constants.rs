@@ -15,3 +15,10 @@ pub const BRICK_WIDTH: f32 = 12.0;
 pub const BALL_RADIUS: f32 = 2.0;
 pub const BALL_VELOCITY_X: f32 = 100.0;
 pub const BALL_VELOCITY_Y: f32 = 100.0;
+
+pub const AUDIO_BRICK_BROKEN: &'static str = "audio/brick_broken.ogg";
+pub const AUDIO_GAME_OVER: &'static str = "audio/game_over.ogg";
+
+pub const AUDIO_MUSICS: &'static [&'static str] = &[
+    "audio/mucic_01.ogg"
+    ];
